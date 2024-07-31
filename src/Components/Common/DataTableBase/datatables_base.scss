@@ -1,0 +1,76 @@
+.rdt_TableHeader {
+  background-color: transparent !important;
+}
+
+.rdt_TableHead {
+  .rdt_TableHeadRow {
+    background-color: var(--vz-light);
+    font-size: 13px;
+    font-weight: 600;
+    border-top: 1px solid var(--vz-border-color);
+
+    > div {
+      border-left: 1px solid var(--vz-border-color);
+      &:last-of-type {
+        border-right: 1px solid var(--vz-border-color);
+      }
+    }
+  }
+}
+
+.rdt_TableBody {
+  // background-color: transparent!important;
+}
+.rdt_TableRow {
+  // background-color: rgba(var(--vz-light-rgb), 0.75);
+  // font-size: 13px;
+  // font-weight: 600;
+  // border-top: 1px solid var(--vz-border-color);
+  // background-color: transparent!important;
+
+  > div {
+    border-left: 1px solid var(--vz-border-color);
+    &:last-of-type {
+      border-right: 1px solid var(--vz-border-color);
+    }
+  }
+}
+
+.rdt_Pagination {
+  // Hide rows # of Total Number
+  // Hide Show How Many of Rows
+  // :not(:last-child) {
+  //   display: none;
+  // }
+  > * {
+    &:not(:last-child) {
+      display: none;
+    }
+  }
+  // span{
+  //   &:nth-of-type(2){
+  //     display: none;
+  //   }
+  // }
+}
+
+html[data-layout-mode="dark"] {
+  .rdt_Pagination {
+    button {
+      &:disabled {
+        svg {
+          fill: var(--vz-gray-400);
+        }
+      }
+
+      &:not(:disabled) {
+        &:hover {
+          background-color: var(--vz-light);
+        }
+        svg {
+          fill: var(--vz-white);
+        }
+      }
+    }
+  }
+}
