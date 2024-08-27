@@ -291,6 +291,8 @@ export const TempChart = ({ isLoading, history }) => {
       } else {
         setChartColor("#33FF57");
       }
+    } else {
+      setSeriesData(history);
     }
   }, [history]);
 

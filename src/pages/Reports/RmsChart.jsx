@@ -21,16 +21,7 @@ const RmsChart = ({ isLoading, history, dataColors }) => {
       // Sorting data by timestamp
       formattedData.sort((a, b) => a.x - b.x);
       setSeriesData(formattedData);
-      // let latestVal = formattedData[formattedData.length - 1];
-      // if (parseFloat(latestVal?.y || 0) >= RMS_DANGER_THRESHOLD) {
-      //   setChartColor("#FF5733");
-      // } else if (parseFloat(latestVal?.y || 0) >= RMS_WARNING_THRESHOLD) {
-      //   setChartColor("#f1963b");
-      // } else if (parseFloat(latestVal?.y || 0) >= RMS_MEDIUM_THRESHOLD) {
-      //   setChartColor("#f7b84b");
-      // } else {
-      //   setChartColor("#33FF57");
-      // }
+
       const markerStyles = formattedData.map((data, index) => {
         let style = {}; // Default empty style object
         if (parseFloat(data.y) >= RMS_DANGER_THRESHOLD) {
@@ -74,6 +65,8 @@ const RmsChart = ({ isLoading, history, dataColors }) => {
       });
 
       setMarkerColors(markerStyles);
+    } else {
+      setSeriesData(history);
     }
   }, [history]);
   const series = [

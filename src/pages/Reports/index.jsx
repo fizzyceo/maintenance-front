@@ -26,6 +26,8 @@ const ReportsPage = () => {
       await getDevices();
       const hoursAgo = Date.now() - FETCH_FOR_LAST_X_HOURS;
       setIsLoading(true);
+      console.log(hoursAgo);
+
       await getAxisHistoryForReports({
         createdAt: { $gte: new Date(hoursAgo) },
       });
@@ -35,31 +37,35 @@ const ReportsPage = () => {
     fetchDevicesAndHistory();
   }, []);
 
+  // useEffect(() => {
+  //   if (selectedDateRange.length === 2) {
+  //     const filter = {
+  //       ts: {
+  //         $gte: new Date(selectedDateRange[0]).getTime(),
+  //         $lte: new Date(selectedDateRange[1]).getTime(),
+  //       },
+  //     };
+  //     setIsLoading(true);
+  //     getAxisHistoryForReports(filter).finally(() => setIsLoading(false));
+  //   }
+  // }, [selectedDateRange]);
+  const [filteredHistory, setFilteredHistory] = useState([]);
   useEffect(() => {
-    if (selectedDateRange.length === 2) {
-      const filter = {
-        ts: {
-          $gte: new Date(selectedDateRange[0]).getTime(),
-          $lte: new Date(selectedDateRange[1]).getTime(),
-        },
-      };
-      setIsLoading(true);
-      getAxisHistoryForReports(filter).finally(() => setIsLoading(false));
-    }
-  }, [selectedDateRange]);
+    console.log(historyForReports);
 
-  const filteredHistory = useMemo(() => {
     if (selectedDeviceLabel) {
-      return historyForReports.filter(
+      let x = historyForReports.filter(
         (hist) => hist.deviceId === selectedDeviceLabel
       );
+      setFilteredHistory(x);
     }
-    return historyForReports;
+    setFilteredHistory(historyForReports);
   }, [selectedDeviceLabel, historyForReports]);
 
   useEffect(() => {
     if (devices.length > 0) {
       const sortedDevices = devices
+        .reverse()
         .map((dev) => ({
           label: dev.deviceId,
           value: dev._id,
@@ -70,7 +76,51 @@ const ReportsPage = () => {
       setSelectedDeviceLabel(sortedDevices[0]?.label);
     }
   }, [devices]);
+  const handleFilterButtonClick = () => {
+    console.log(
+      "Filter button clicked with date range:",
+      selectedDateRange,
+      "and device label:",
+      selectedDeviceLabel
+    );
 
+    // Initialize the filter object
+    let filter = {};
+
+    // Add date range filter if provided
+    if (selectedDateRange.length === 2) {
+      filter.ts = {
+        $gte: new Date(selectedDateRange[0]).getTime(),
+        $lte: new Date(selectedDateRange[1]).getTime(),
+      };
+    } else {
+      const hoursAgo = Date.now() - FETCH_FOR_LAST_X_HOURS;
+      filter.createdAt = { $gte: new Date(hoursAgo) };
+    }
+
+    // Add device filter if a device label is selected
+    if (selectedDeviceLabel) {
+      filter.deviceId = { $in: [selectedDeviceLabel] };
+    }
+
+    // Perform any additional actions needed on filter button click
+    // For example, you may want to refresh data based on selected filters
+    setIsLoading(true);
+    getAxisHistoryForReports(filter).finally(() => setIsLoading(false));
+  };
+
+  // Handler for Cancel button click
+  const handleCancelButtonClick = () => {
+    console.log("Cancel button clicked");
+    // Reset state to initial values
+    setSelectedDeviceLabel("");
+    setSelectedAxis(["x", "y", "z"]);
+    setSelectedDateRange([]);
+    setIsLoading(true);
+    getAxisHistoryForReports({
+      createdAt: { $gte: Date.now() - FETCH_FOR_LAST_X_HOURS },
+    }).finally(() => setIsLoading(false));
+  };
   return (
     <div>
       <Section
@@ -80,6 +130,8 @@ const ReportsPage = () => {
         selectedAxis={selectedAxis}
         selectedDateRange={selectedDateRange}
         setSelectedDateRange={setSelectedDateRange}
+        onFilterButtonClick={handleFilterButtonClick}
+        onCancelButtonClick={handleCancelButtonClick}
       />
       <Card>
         <CardHeader>
