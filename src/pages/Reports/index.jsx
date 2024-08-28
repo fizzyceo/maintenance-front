@@ -30,6 +30,7 @@ const ReportsPage = () => {
 
       await getAxisHistoryForReports({
         createdAt: { $gte: new Date(hoursAgo) },
+        deviceId: { $in: ["VIB0001"] },
       });
       setIsLoading(false);
     };
@@ -51,8 +52,6 @@ const ReportsPage = () => {
   // }, [selectedDateRange]);
   const [filteredHistory, setFilteredHistory] = useState([]);
   useEffect(() => {
-    console.log(historyForReports);
-
     if (selectedDeviceLabel) {
       let x = historyForReports.filter(
         (hist) => hist.deviceId === selectedDeviceLabel
@@ -77,13 +76,6 @@ const ReportsPage = () => {
     }
   }, [devices]);
   const handleFilterButtonClick = () => {
-    console.log(
-      "Filter button clicked with date range:",
-      selectedDateRange,
-      "and device label:",
-      selectedDeviceLabel
-    );
-
     // Initialize the filter object
     let filter = {};
 
@@ -101,6 +93,8 @@ const ReportsPage = () => {
     // Add device filter if a device label is selected
     if (selectedDeviceLabel) {
       filter.deviceId = { $in: [selectedDeviceLabel] };
+    } else {
+      filter.deviceId = { $in: ["VIB0001"] };
     }
 
     // Perform any additional actions needed on filter button click
@@ -111,7 +105,6 @@ const ReportsPage = () => {
 
   // Handler for Cancel button click
   const handleCancelButtonClick = () => {
-    console.log("Cancel button clicked");
     // Reset state to initial values
     setSelectedDeviceLabel("");
     setSelectedAxis(["x", "y", "z"]);
@@ -119,6 +112,7 @@ const ReportsPage = () => {
     setIsLoading(true);
     getAxisHistoryForReports({
       createdAt: { $gte: Date.now() - FETCH_FOR_LAST_X_HOURS },
+      deviceId: { $in: ["VIB0001"] },
     }).finally(() => setIsLoading(false));
   };
   return (

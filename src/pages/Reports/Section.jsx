@@ -180,10 +180,9 @@ const Section = ({
                     {...reactSelectStyling}
                     options={devicesOptions}
                     isSearchable={true}
-                    placeholder={t("All devices")}
+                    placeholder={t("VIB0001")}
                     isClearable={true}
                     name={"search"}
-                    defaultValue={devicesOptions[0]} // Default to first device
                     onChange={(option) => {
                       setSelectedDeviceLabel(option?.label);
                     }}
