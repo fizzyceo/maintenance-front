@@ -28,6 +28,7 @@ import ReportsPage from "../pages/Reports";
 const authProtectedRoutes = [
   { path: "/dashboard", component: <Dashboards.DashboardOne /> },
   { path: "/dashboard2", component: <Dashboards.Dashboard2 /> },
+  { path: "/vibration-channels", component: <Dashboards.VibrationChannels /> },
 
   { path: "/staffs", component: <StaffsPage /> },
   { path: "/reports", component: <ReportsPage /> },

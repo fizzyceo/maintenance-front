@@ -92,6 +92,12 @@ const Navdata = () => {
           link: "/dashboard2",
           parentId: "dashboard",
         },
+        {
+          id: "dashboard3",
+          label: t("Vibration Channels"),
+          link: "/vibration-channels",
+          parentId: "dashboard",
+        },
       ],
     },
 
